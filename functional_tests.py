@@ -6,14 +6,13 @@ import unittest
 class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
-        
         self.browser = webdriver.Firefox()
 
     def tearDown(self):
         self.browser.quit()
 
     def test_can_start_a_list_and_retrieve_it_later(self):
-        #checking out the new to-do app online
+        #checking out the new to-do app online homepage
         self.browser.get('http://localhost:8000')
 
         # She notices the page title and header mention to-do lists
@@ -35,9 +34,11 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows),
-			"New to-do item did not appear in table"
+        self.assertIn( '1: Buy peacock feathers', [row.text for row in rows]
+        self.assertIn(
+            '2: Use peacock feathers to make a fly',
+             [row.text for row in rows]
+
             )
 
         #There is still a text box inviting her to add another item. She enters
