@@ -6,8 +6,20 @@ from lists.models import Item
 
 from lists.views import home_page
 
-class ItemModelTest(TestCase):
+class HomePageTest(TestCase):
 
+    def test_uses_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
+        # expected_html = render_to_string('home.html')
+        # self.assertEqual(html, expected_html)
+
+    def test_can_save_a_POST_request(self):
+        response = self.client.post('/', data={'item': 'A new list item'})
+        self.assertIn('A new list item', response.content.decode())
+        self.assertTemplateUsed(response, 'home.html')
+
+class ItemModelTest(TestCase):
     def test_saving_and_retrieving_items(self):
         first_item = Item()
         first_item.text = 'The first (ever) list item'
@@ -24,16 +36,3 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item, 'Item the second')
-
-class HomePageTest(TestCase):
-
-    def test_uses_home_template(self):
-        response = self.client.get('/')
-        self.assertTemplateUsed(response, 'home.html')
-        # expected_html = render_to_string('home.html')
-        # self.assertEqual(html, expected_html)
-
-    def test_can_save_a_POST_request(self):
-        response = self.client.post('/', data={'item': 'A new list item'})
-        self.assertIn('A new list item', response.content.decode())
-        self.assertTemplateUsed(response, 'home.html')
